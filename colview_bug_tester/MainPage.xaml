@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:colview_bug_tester"
+    xmlns:classes="clr-namespace:colview_bug_tester.Classes"
+    x:Class="colview_bug_tester.MainPage"
+    x:DataType="local:MainPage"
+    BackgroundColor="Black"
+>
+
+    <ContentPage.Resources>
+
+        <ResourceDictionary>
+
+            <Style TargetType="Button" Class="btnStringList">
+
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="BorderWidth" Value="1" />
+                <!--<Setter Property="BackgroundColor" Value="Transparent" />-->
+
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="Black" />
+                                    <Setter Property="FontAttributes" Value="Bold" />
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                    <Setter Property="BorderColor" Value="Transparent" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="White" />
+                                    <Setter Property="FontAttributes" Value="None" />
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                    <Setter Property="BorderColor" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Label" Class="lblStringList">
+
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="Padding" Value="10" />
+                <!--<Setter Property="BorderWidth" Value="1" />-->
+                <!--<Setter Property="BackgroundColor" Value="Transparent" />-->
+
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="#555555" />
+                                    <Setter Property="FontAttributes" Value="Bold" />
+                                    <Setter Property="BackgroundColor" Value="White" />
+                                    <!--<Setter Property="BorderColor" Value="Transparent" />-->
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="TextColor" Value="White" />
+                                    <Setter Property="FontAttributes" Value="None" />
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                    <!--<Setter Property="BorderColor" Value="White" />-->
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+
+    </ContentPage.Resources>
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="25"
+        >
+
+            <Grid 
+                RowDefinitions="auto,auto"
+                RowSpacing="20"
+                HorizontalOptions="Center"
+                BackgroundColor="#333333"
+                Padding="20"
+            >
+
+                <!-- Removing this results in the issue going away. -->
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CommandCon}" />
+                </Grid.GestureRecognizers>
+
+                <!-- You can try this alternative, which doesn't change anything -->
+                <!--<Grid.GestureRecognizers>
+                    <TapGestureRecognizer />
+                </Grid.GestureRecognizers>-->
+
+                <!-- Issue: items can't be selected when the parent component's TapGestureRecognizer is set. -->
+                <CollectionView 
+                    Grid.Row="0"
+                    ItemsSource="{Binding StringList}" 
+                    SelectionMode="Single" 
+                    SelectedItem="{Binding SelectedString, Mode=TwoWay}"
+                    SelectionChangedCommand="{Binding CommandStringSelection}"
+                    MaximumHeightRequest="50"
+                >
+
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="15" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="classes:StringXaml">
+                            <Button
+                                Text="{Binding Value}"
+                                StyleClass="btnStringList" InputTransparent="True"
+                            />
+                            
+                            <!-- You can try this alternative, which doesn't change anything -->
+                            <!--<Label
+                                Text="{Binding Value}"
+                                StyleClass="lblStringList"
+                                VerticalOptions="Center"
+                            />-->
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+
+                </CollectionView>
+
+                <!-- This button can be clicked, but the CollectionView items can't be selected (on iOS) (unless you press down for a long time). -->
+                <Button 
+                    Grid.Row="1" 
+                    Text="Hello World" TextColor="Black"
+                    BackgroundColor="White"  
+                    Command="{Binding CommandBtnHelloWorld}"
+                />
+
+            </Grid>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>
