@@ -20,7 +20,7 @@ The TapGestureRecognizer of the CollectionView's parent shouldn't be called and 
 
 # How To Replicate
 
-1. Try to click one of the CollectionView's items (i.e. either 'Hello' or 'World'). You will fine that the container's TapGestureRecognizer is called, but the CollectionView's selection doesn't occur.
+1. Try to click one of the CollectionView's items (i.e. either 'Hello' or 'World'). You will find that the container's TapGestureRecognizer is called, but the CollectionView's selection doesn't occur.
 2. Press down on one of the CollectionView's items for a few seconds. You might find that the selection occurs (and that the parent's TapGestureRecognizer isn't called).
 3. Click the "Hello World" button beneath the CollectionView. You should observe that its command is called without issue, which contrasts with the CollectionView's items.
 4. Remove the TapGestureRecognizer from the CollectionView's parent.
